@@ -27,6 +27,8 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import FlightCard from './FlightCard'; // Import the FlightCard component
 import './FlightSearch.css';
 import CloseIcon from '@material-ui/icons/Close';
+import LoadingScreen from '../Loading/LoadingScreen';
+
 
 
 const FlightSearch = () => {
@@ -44,6 +46,7 @@ const FlightSearch = () => {
   const [toSuggestions, setToSuggestions] = useState([]);
   const [flights, setFlights] = useState([]); 
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchAirportData = async (query, isFromField) => {
     if (query.length < 3) return;
@@ -94,6 +97,7 @@ const FlightSearch = () => {
   }, [to]);
 
   const handleSearch = async () => {
+    setIsLoading(true);
     console.log('Searching for flights...');
 
     // Check for empty fields
@@ -120,8 +124,9 @@ const FlightSearch = () => {
         headers: options.headers,
       });
       const data = await response.json();
-      console.log(data); // Display the flight search results
-      setFlights(data.data.itineraries); // Store the flight data in state
+      console.log(data); 
+      setIsLoading(false);
+      setFlights(data.data.itineraries); 
     } catch (error) {
       console.error('Error searching for flights:', error);
     }
@@ -221,6 +226,7 @@ const FlightSearch = () => {
   };
   return (
     <>
+      {isLoading && <LoadingScreen />}
     <Box className="flight-search-container">
       <Box className="search-box">
         <Grid container spacing={2}>
