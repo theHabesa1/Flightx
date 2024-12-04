@@ -1,0 +1,64 @@
+/* Header container */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: rgba(255, 255, 255, 0.8); /* Milky white background */
+    border-radius: 16px; /* Rounded corners */
+    backdrop-filter: blur(10px); /* Frosted glass effect */
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15); /* Floating shadow effect */
+    position: fixed; /* Fixed to the viewport */
+    width: 90%; /* Reduced width */
+    max-width: 1900px; /* Limit the max width */
+    left: 50%; /* Horizontally center */
+    transform: translate(-50%, 0); /* Center perfectly */
+    z-index: 1000; /* Ensure it stays on top */
+  }
+  
+  /* Logo section */
+  .header-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between logo and text */
+  }
+  
+  .plane-icon {
+    width: 40px;
+    height: 40px;
+    fill: #000; /* Black logo color */
+  }
+  
+  .header-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #000; /* Text color */
+  }
+  
+  /* Navigation buttons */
+  .header-buttons {
+    display: flex;
+    gap: 20px; /* Space between buttons */
+  }
+  
+  .header-button {
+    font-size: 16px;
+    font-weight: 600;
+    color: #000;
+    background: none; /* Remove button background */
+    border: none; /* No border */
+    cursor: pointer;
+    text-transform: none; /* Avoid uppercase transformation */
+    transition: color 0.3s ease, transform 0.2s ease; /* Smooth hover effects */
+  }
+  
+  .header-button:hover {
+    color: #007bff; /* Blue color on hover */
+    text-decoration: underline; /* Underline on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+  }
+  
+  .header-button:focus {
+    outline: none; /* Remove focus outline */
+  }
+  
