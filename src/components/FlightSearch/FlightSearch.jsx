@@ -28,7 +28,7 @@ import FlightCard from './FlightCard'; // Import the FlightCard component
 import './FlightSearch.css';
 import CloseIcon from '@material-ui/icons/Close';
 import LoadingScreen from '../Loading/LoadingScreen';
-
+import { fetchAirportData, searchFlights } from '../../utils/apiService';
 
 
 const FlightSearch = () => {
@@ -48,50 +48,22 @@ const FlightSearch = () => {
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetchAirportData = async (query, isFromField) => {
-    if (query.length < 3) return;
-
-    const options = {
-      method: 'GET',
-      headers: {
-        'x-rapidapi-key': '04255f6525mshbcfa91250673d25p1aa87djsn3e5f8cb1fdb8', // Replace with your actual API key
-        'x-rapidapi-host': 'sky-scrapper.p.rapidapi.com',
-      },
-    };
-
-    try {
-      const response = await fetch(`https://sky-scrapper.p.rapidapi.com/api/v1/flights/searchAirport?query=${query}&locale=en-US`, options);
-      const data = await response.json();
-
-      if (data.status) {
-        const suggestions = data.data.map(item => ({
-          id: item.skyId,
-          entityId: item.entityId,
-          name: item.presentation.title,
-          subtitle: item.presentation.subtitle,
-        }));
-
-        if (isFromField) {
-          setFromSuggestions(suggestions);
-        } else {
-          setToSuggestions(suggestions);
-        }
-      }
-    } catch (error) {
-      console.error('Error fetching airport data:', error);
-    }
-  };
-
   useEffect(() => {
-    const debounceFetch = setTimeout(() => {
-      fetchAirportData(from, true);
+    const debounceFetch = setTimeout(async () => {
+      if (from) {
+        const suggestions = await fetchAirportData(from);
+        setFromSuggestions(suggestions);
+      }
     }, 300);
     return () => clearTimeout(debounceFetch);
   }, [from]);
 
   useEffect(() => {
-    const debounceFetch = setTimeout(() => {
-      fetchAirportData(to, false);
+    const debounceFetch = setTimeout(async () => {
+      if (to) {
+        const suggestions = await fetchAirportData(to);
+        setToSuggestions(suggestions);
+      }
     }, 300);
     return () => clearTimeout(debounceFetch);
   }, [to]);
@@ -99,36 +71,30 @@ const FlightSearch = () => {
   const handleSearch = async () => {
     setIsLoading(true);
     console.log('Searching for flights...');
-
+  
     // Check for empty fields
     if (!fromSkyId || !toSkyId || !departDate) {
       alert('Please fill in all required fields.');
+      setIsLoading(false);
       return;
     }
-
-    const options = {
-      method: 'GET',
-      hostname: 'sky-scrapper.p.rapidapi.com',
-      port: null,
-      path: `/api/v1/flights/searchFlights?originSkyId=${fromSkyId}&destinationSkyId=${toSkyId}&originEntityId=${fromEntityId}&destinationEntityId=${toEntityId}&date=${departDate}&cabinClass=economy&adults=${travelers}&sortBy=best&currency=USD&market=en-US&countryCode=US`,
-      headers: {
-        'x-rapidapi-key': '04255f6525mshbcfa91250673d25p1aa87djsn3e5f8cb1fdb8',
-        'x-rapidapi-host': 'sky-scrapper.p.rapidapi.com'
-      }
-    };
-
-    // Make the request using fetch
+  
     try {
-      const response = await fetch(`https://${options.hostname}${options.path}`, {
-        method: options.method,
-        headers: options.headers,
+      const flightResults = await searchFlights({
+        fromSkyId,
+        toSkyId,
+        fromEntityId,
+        toEntityId,
+        departDate,
+        travelers
       });
-      const data = await response.json();
-      console.log(data); 
+  
+      setFlights(flightResults);
+      console.log('Flight Results:', flightResults);
       setIsLoading(false);
-      setFlights(data.data.itineraries); 
     } catch (error) {
       console.error('Error searching for flights:', error);
+      setIsLoading(false);
     }
   };
 
