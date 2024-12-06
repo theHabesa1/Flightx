@@ -22,11 +22,11 @@ const FlightDetails = ({ open, onClose, flight, sessionId }) => {
       if (open && flight) {
         setIsLoading(true);
         try {
-          // Prepare legs from the flight object
+         
           const legs = flight.legs.map(leg => ({
             origin: leg.origin.code,
             destination: leg.destination.code,
-            date: flight.departureDate // Assuming this is available in the flight object
+            date: flight.departureDate 
           }));
 
           const details = await getFlightDetails({
