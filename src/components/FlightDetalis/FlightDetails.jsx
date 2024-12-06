@@ -103,8 +103,7 @@ const FlightDetails = ({ open, onClose, flight, sessionId }) => {
               Total Price: {flight.price.formatted}
             </Typography>
 
-            {/* Additional Details from API Response */}
-            {/* You can expand this based on the actual API response */}
+           
             {flightDetails && (
               <Box mt={2}>
                 <Typography variant="h6">Additional Details</Typography>
