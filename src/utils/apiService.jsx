@@ -59,4 +59,38 @@ const searchFlights = async (params) => {
   }
 };
 
-export { fetchAirportData, searchFlights };
+const getFlightDetails = async (params) => {
+  const {
+    itineraryId,
+    sessionId,
+    legs
+  } = params;
+
+  try {
+    // Encode the legs parameter
+    const encodedLegs = encodeURIComponent(JSON.stringify(legs));
+
+    const response = await fetch(
+      `https://${API_HOST}/api/v1/flights/getFlightDetails?` + 
+      `itineraryId=${itineraryId}&` +
+      `sessionId=${sessionId}&` +
+      `legs=${encodedLegs}&` +
+      `adults=1&currency=USD&locale=en-US&market=en-US&countryCode=US`,
+      {
+        method: 'GET',
+        headers: {
+          'x-rapidapi-key': API_KEY,
+          'x-rapidapi-host': API_HOST,
+        },
+      }
+    );
+    
+    const data = await response.json();
+    return data.data;
+  } catch (error) {
+    console.error('Error fetching flight details:', error);
+    return null;
+  }
+};
+
+export { fetchAirportData, searchFlights,getFlightDetails  };

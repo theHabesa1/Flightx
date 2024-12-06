@@ -15,9 +15,9 @@ const useStyles = makeStyles((theme) => ({
   card: {
     marginBottom: '16px',
     transition: 'transform 0.2s',
-    borderRadius: '12px', // Rounded corners
-    maxWidth: '800px', // Adjust maximum width
-    margin: '0 auto', // Center the card
+    borderRadius: '12px', 
+    maxWidth: '800px',
+    margin: '0 auto', 
     '&:hover': {
       transform: 'scale(1.02)',
       boxShadow: theme.shadows[5],
@@ -37,13 +37,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const FlightCard = ({ flight }) => {
+const FlightCard = ({ flight, onSelect  }) => {
   const classes = useStyles();
   const { price, legs } = flight;
-  const leg = legs[0]; // Assume displaying only the first leg for simplicity
+  const leg = legs[0]; 
 
   return (
-    <Card variant="outlined" className={classes.card}>
+    <Card variant="outlined" className={classes.card} onClick={onSelect} style={{ cursor: 'pointer' }}>
       <CardContent>
         <Typography className={classes.price}>
           {price.formatted}
