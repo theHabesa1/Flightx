@@ -1,5 +1,5 @@
 const API_KEY = import.meta.env.VITE_RAPIDAPI_KEY;
-const API_HOST = import.meta.env.VITE_RAPIDAPI_HOST;
+const API_HOST = sky-scrapper.p.rapidapi.com;
 
 const fetchAirportData = async (query) => {
   if (query.length < 3) return [];
